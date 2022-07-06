@@ -100,7 +100,7 @@ public class JdbcTransferDao implements TransferDao {
         transfer.setAccountFrom(accountFrom);
         int accountTo = rowSet.getInt("account_to");
         transfer.setAccountTo(accountTo);
-        double transferAmount = rowSet.getDouble("amount");
+        BigDecimal transferAmount = rowSet.getBigDecimal("amount");
         transfer.setTransferAmount(transferAmount);
 
         return transfer;

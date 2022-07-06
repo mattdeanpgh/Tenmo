@@ -3,6 +3,7 @@ package com.techelevator.tenmo.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.Min;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,11 +13,11 @@ public class Transfer {
     private int transferStatusId;
     private int accountFrom;
     private int accountTo;
-    private double transferAmount;
+    private BigDecimal transferAmount;
 
     public Transfer() { }
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double transferAmount) {
+    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal transferAmount) {
         this.transferId=transferId;
         this.transferTypeId=transferTypeId;
         this.transferStatusId=transferStatusId;
@@ -35,8 +36,8 @@ public class Transfer {
     public void setAccountFrom(int accountFrom) {this.accountFrom = accountFrom;}
     public int getAccountTo() {return accountTo;}
     public void setAccountTo(int accountTo) {this.accountTo = accountTo;}
-    public double getTransferAmount() {return transferAmount;}
-    public void setTransferAmount(double transferAmount) {this.transferAmount = transferAmount;}
+    public BigDecimal getTransferAmount() {return transferAmount;}
+    public void setTransferAmount(BigDecimal transferAmount) {this.transferAmount = transferAmount;}
 
 
 }
