@@ -41,7 +41,7 @@ public class JdbcAccountDao implements AccountDao {
 
     @Override
     public BigDecimal getBalanceByAcctId(int acctId) {
-        BigDecimal balance = jdbcTemplate.queryForObject("SELECT balance FROM tenmo_account WHERE acct_id = ?;", BigDecimal.class);
+        BigDecimal balance = jdbcTemplate.queryForObject("SELECT balance FROM tenmo_account WHERE account_id = ?;", BigDecimal.class);
         return balance;
     }
 
