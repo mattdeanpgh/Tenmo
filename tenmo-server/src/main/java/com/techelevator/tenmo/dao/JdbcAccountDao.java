@@ -32,12 +32,27 @@ public class JdbcAccountDao implements AccountDao {
         }
         return accounts;
     }
+    public Account getAccount(int accountId){
+        Account account = null;
+        String sql = "SELECT * FROM tenmo_account "
+                + "WHERE account_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId);
+            if (results.next()) {
+                account = mapRowToAccount((results));
+            }
+        return account;
+    }
 
 
     @Override
-    public BigDecimal getBalanceByUserId(int id) {
-        BigDecimal balance = jdbcTemplate.queryForObject("SELECT balance FROM tenmo_account WHERE user_id = ?;", BigDecimal.class);
-        return balance;
+    public BigDecimal getBalanceByUserId(int userId) {
+        Account account = null;
+        String sql = "SELECT * FROM tenmo_account WHERE user_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        if (results.next()) {
+            account = mapRowToAccount(results);
+        }
+        return account.getBalance();
     }
 
     @Override
@@ -54,26 +69,27 @@ public class JdbcAccountDao implements AccountDao {
 
     @Override
     public void updateBalance(BigDecimal changeBalance, int acctId) {
-        String sql = "UPDATE tenmo_account" +
-                "SET balance = balance + ?" +
+        String sql = "UPDATE tenmo_account " +
+                "SET balance = balance + ? " +
                 "WHERE account_id = ?;";
         jdbcTemplate.update(sql, Account.class, changeBalance, acctId);
     }
 
 
     @Override
-    public void addAccount(int userId) {
-        String sql = "UPDATE tenmo_account" +
-                "SET balance =" + STARTING_BALANCE +
+    public Account addAccount(int userId) {
+        String sql = "UPDATE tenmo_account " +
+                "SET balance = " + STARTING_BALANCE +
                 "WHERE user_id = ?;";
         Integer newId = jdbcTemplate.update(sql, Account.class, userId);
 
+        return null;
     }
 
 
     @Override
     public void deleteAccount(int acctId) {
-        String sql = "DELETE FROM tenmo_account WHERE acct_id = ?;";
+        String sql = "DELETE FROM tenmo_account WHERE account_id = ?;";
         jdbcTemplate.update(sql, acctId);
     }
 
