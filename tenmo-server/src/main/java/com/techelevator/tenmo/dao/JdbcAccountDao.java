@@ -22,7 +22,8 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
-        String sql = "select * from tenmo_account";
+        String sql = "SELECT * FROM tenmo_account " +
+                "ORDER BY account_id";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while (results.next()) {
@@ -74,7 +75,7 @@ public class JdbcAccountDao implements AccountDao {
         Account account = new Account();
         account.setAccountId(results.getInt("account_id"));
         account.setUserId(results.getInt("user_id"));
-        account.getBalance(results.getBigDecimal("balance"));
+        account.setBalance(results.getBigDecimal("balance"));
         return account;
     }
 
