@@ -16,7 +16,7 @@ public interface AccountDao {
 
         void updateBalance(BigDecimal balance, int acctId);
 
-        void addAccount(int userId);
+        Account addAccount(int userId);
 
         void deleteAccount(int acctId);
 

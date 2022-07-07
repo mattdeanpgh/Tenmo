@@ -48,6 +48,43 @@ public class JdbcAccountDaoTests extends BaseDaoTests {
 
     }
 
+    @Test
+    public void getBalanceByAccountId_return_correct_balance() {
+       BigDecimal balance = sut.getBalanceByAcctId(2001);
+        Assert.assertTrue(sut.getBalanceByAcctId(2001).compareTo(new BigDecimal(1000)) == 0);
+
+    }
+
+    @Test
+    public void getBalanceByUserId_return_correct_balance() {
+      BigDecimal balance = sut.getBalanceByUserId(1002);
+      Assert.assertTrue(sut.getBalanceByUserId(1002).compareTo(new BigDecimal(500)) == 0);
+
+    }
+
+   /* @Test
+    public void updateBalance_returns_expected_valued() {
+        BigDecimal balanceToUpdate = sut.getBalanceByAcctId(2001);
+        sut.updateBalance(new BigDecimal(500), 2001);
+        Assert.assertTrue(sut.getBalanceByAcctId(2001).compareTo(new BigDecimal(1500)) == 0);
+    }*/
+
+   /* @Test
+    public void add_account_adds_account() {
+        Account newAccount = new Account(1004);
+
+
+    }*/
+
+    @Test
+    public void deleteAccount_cant_be_retrieved(){
+        int accountToDelete = 2001;
+        sut.deleteAccount(accountToDelete);
+
+        Account actualAccount = sut.getAccount(accountToDelete);
+        Assert.assertNull(actualAccount);
+    }
+
 
     private void assertAccountListsMatch(Account expected, Account actual) {
         Assert.assertEquals(expected.getAccountId(), actual.getAccountId());
