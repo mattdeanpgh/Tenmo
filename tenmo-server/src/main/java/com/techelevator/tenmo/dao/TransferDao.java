@@ -2,13 +2,14 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transfer;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransferDao {
 
     Transfer getTransfer (int transferId);
 
-    Transfer createTransfer(Transfer transfer);
+    Transfer createTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal transferAmount);
 
     List<Transfer> getAllTransfers();
 

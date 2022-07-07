@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.net.BindException;
 import java.util.ArrayList;
 import java.util.List;
 @Component
@@ -77,12 +78,12 @@ public class JdbcAccountDao implements AccountDao {
 
     @Override
     public Account addAccount(int userId) {
-        String sql = "UPDATE tenmo_account " +
-                "SET balance = " + STARTING_BALANCE +
-                "WHERE user_id = ?;";
-        Integer newId = jdbcTemplate.update(sql, Account.class, userId);
 
-        return null;
+        String sql = "INSERT INTO tenmo_account (user_id, balance) " +
+                "VALUES (?, " + STARTING_BALANCE + ") RETURNING account_id;";
+        int accountId = jdbcTemplate.queryForObject(sql, Integer.class, userId);
+
+        return getAccount(accountId);
     }
 
 

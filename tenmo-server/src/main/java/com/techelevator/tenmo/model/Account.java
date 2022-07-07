@@ -19,8 +19,9 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(int userId) {
+    public Account(int userId, BigDecimal balance) {
         this.userId = userId;
+        this.balance = balance;
     }
 
     public int getAccountId() {

@@ -6,8 +6,16 @@ INSERT INTO tenmo_user (username,password_hash,role) VALUES ('user3','user3','RO
 
 
 
-INSERT INTO tenmo_account (account_id, user_id, balance) VALUES (2001, 1001, 1000);
-INSERT INTO tenmo_account (account_id, user_id, balance) VALUES (2002, 1002, 500);
-INSERT INTO tenmo_account (account_id, user_id, balance) VALUES (2003, 1003, 250);
+INSERT INTO tenmo_account (user_id, balance) VALUES (1001, 1000);
+INSERT INTO tenmo_account (user_id, balance) VALUES (1002, 500);
+INSERT INTO tenmo_account (user_id, balance) VALUES (1003, 250);
+
+
+INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount)
+VALUES (2, 2, 2001, 2002, 50);
+INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount)
+VALUES (2, 2, 2002, 2003, 100);
+INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id ,account_from, account_to, amount)
+VALUES (2, 2, 2003, 2001, 200);
 
 COMMIT TRANSACTION;

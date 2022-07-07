@@ -69,12 +69,15 @@ public class JdbcAccountDaoTests extends BaseDaoTests {
         Assert.assertTrue(sut.getBalanceByAcctId(2001).compareTo(new BigDecimal(1500)) == 0);
     }*/
 
-   /* @Test
-    public void add_account_adds_account() {
-        Account newAccount = new Account(1004);
+   @Test
+    public void add_account_adds_account() { //new balance added
+       Account newAccount = new Account(1001, new BigDecimal(1000));
+       Account actualAccount = sut.addAccount(1001);
+       newAccount.setAccountId(actualAccount.getAccountId());
+       assertAccountListsMatch(newAccount, actualAccount);
 
 
-    }*/
+    }
 
     @Test
     public void deleteAccount_cant_be_retrieved(){
