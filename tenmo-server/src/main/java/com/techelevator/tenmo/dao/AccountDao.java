@@ -12,7 +12,7 @@ public interface AccountDao {
 
         BigDecimal getBalanceByUserId(int id);
 
-        BigDecimal getBalanceByAcctId(int acctId);
+        Account getBalanceByAcctId(int acctId);
 
         void updateBalance(BigDecimal balance, int acctId);
 

@@ -40,9 +40,16 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public BigDecimal getBalanceByAcctId(int acctId) {
-        BigDecimal balance = jdbcTemplate.queryForObject("SELECT balance FROM tenmo_account WHERE account_id = ?;", BigDecimal.class);
-        return balance;
+    public Account getBalanceByAcctId(int acctId) {
+        Account account = null;
+        String sql = "SELECT * FROM tenmo_account WHERE account_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, acctId);
+        if (results.next()) {
+            account = mapRowToAccount(results);
+        }
+
+        return account;
+//        return jdbcTemplate.queryForObject("SELECT * FROM tenmo_account WHERE account_id = ?;", Account.class);
     }
 
     @Override
@@ -74,7 +81,7 @@ public class JdbcAccountDao implements AccountDao {
         Account account = new Account();
         account.setAccountId(results.getInt("account_id"));
         account.setUserId(results.getInt("user_id"));
-        account.getBalance(results.getBigDecimal("balance"));
+        account.setBalance(results.getBigDecimal("balance"));
         return account;
     }
 
