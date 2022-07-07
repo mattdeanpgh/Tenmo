@@ -48,7 +48,6 @@ public class JdbcAccountDao implements AccountDao {
         if (results.next()) {
             account = mapRowToAccount(results);
         }
-
         return account.getBalance();
     }
 
