@@ -6,6 +6,10 @@ import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -91,11 +95,14 @@ public class App {
     }
 
 	private void viewCurrentBalance() {
-        
+
         String token = currentUser.getToken();
         if (token != null) {
-            Account account = restTemplate.getForObject(API_BASE_URL + "account/balance/2001", Account.class);
-            System.out.println(account.getBalance());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBearerAuth(token);
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+            ResponseEntity<BigDecimal> account = restTemplate.exchange(API_BASE_URL + "account/balance/2001", HttpMethod.GET, entity, BigDecimal.class);
+            System.out.println(account.getBody());
         }
     }
 
