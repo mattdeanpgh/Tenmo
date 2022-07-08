@@ -51,10 +51,11 @@ public class AccountService {
             headers.setBearerAuth(authToken);
             HttpEntity<Void> entity = new HttpEntity<>(headers);
             try {
-                ResponseEntity<Transfer> response = restTemplate.exchange(API_BASE_URL + "/transfer/3001", HttpMethod.GET,
+                ResponseEntity<Transfer> response = restTemplate.exchange(API_BASE_URL + "/transfer/3003", HttpMethod.GET,
                         entity, Transfer.class);
                 transfer = response.getBody();
             } catch (RestClientResponseException | ResourceAccessException e) {
+                System.out.println(e.getMessage());
                 BasicLogger.log(e.getMessage());
             }
         }

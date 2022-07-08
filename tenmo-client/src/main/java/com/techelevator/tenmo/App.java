@@ -109,17 +109,16 @@ public class App {
 	private void viewTransferHistory() {
         Transfer[] transfers = accountService.listTransfers();
         Transfer transfer = accountService.viewTransfer();
+        int transferSpecifics;
 
         if (transfers != null) {
             consoleService.printTransfers(transfers);
-            int transferSpecifics = 0;
+            System.out.println();
             transferSpecifics = consoleService.promptForMenuSelection("Please enter transfer ID to view details (0 to cancel): ");
-            transfer.setTransferId(transferSpecifics);
-                if (transferSpecifics != 0) {
-                    consoleService.printTransfer(transfer);
-                }
-                else System.out.println("This sucks");
-        } else System.out.println("This is not working");
+            if (transferSpecifics > 0) {
+                consoleService.printTransfer(transfer);
+            }
+        }
     }
 
 

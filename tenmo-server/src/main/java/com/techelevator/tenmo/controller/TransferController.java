@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
+//@PreAuthorize("isAuthenticated()")
 @RequestMapping("/transfer")
 public class TransferController {
     private TransferDao transferDao;
@@ -41,9 +41,10 @@ public class TransferController {
 
     @RequestMapping(path = "/{transferId}", method = RequestMethod.POST)
     public Transfer transferById(@Valid @RequestBody Transfer transfer) {
+        int accountFrom = transfer.getAccountFrom();
 
        if ((transfer.getTransferAmount().compareTo(new BigDecimal(0.00)) == 1) &&
-                (transfer.getTransferAmount() >= transfer.getAccountFrom().//account balance)))
+                (transfer.getTransferAmount().compareTo(accountDao.getBalanceByAcctId(accountFrom)) == 1))
         {
 
         accountDao.updateBalanceFrom(transfer.getTransferAmount(), transfer.getAccountFrom());
@@ -52,7 +53,7 @@ public class TransferController {
                 transfer.getAccountTo(), transfer.getTransferAmount());
 
 
-    }
+    } else return null;
 }
 }
 
