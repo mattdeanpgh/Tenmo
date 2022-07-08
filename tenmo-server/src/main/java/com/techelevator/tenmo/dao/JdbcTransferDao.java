@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserNotFoundException;
@@ -36,23 +37,14 @@ public class JdbcTransferDao implements TransferDao {
 
     @Override
     public Transfer createTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal transferAmount) {
-        String sql = "INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
-                     "VALUES (2, 2, ?, ?, ?) " +
-                     "RETURNING transfer_id;";
+        String sql =    "INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
+                        "VALUES (2, 2, ?, ?, ?) " +
+                        "RETURNING transfer_id;" ;
+
         int transferId = jdbcTemplate.queryForObject(sql, Integer.class, accountFrom, accountTo, transferAmount);
 
 
         return getTransfer(transferId);
-    }
-/////added this - let me know if I've just been staring at a computer too long.  This is obviously only 1/2 of the transaction.  
-    public Transfer transferTo(int accountFrom, int accountTo, BigDecimal transferAmount){
-        String sql = "INSERT INTO tenmo_transfer (account_from, account_to, amount" +
-                "VALUES (?, ?, ?) " +
-                "JOIN tenmo_account WHERE user_id = account_to " +
-                "SET balance = balance +;" + transferAmount;
-        jdbcTemplate.update(sql, accountFrom, accountFrom, transferAmount);
-
-        return getTransfer(accountTo);
     }
 
 
