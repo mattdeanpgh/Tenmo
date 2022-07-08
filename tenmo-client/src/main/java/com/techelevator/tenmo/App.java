@@ -107,6 +107,12 @@ public class App {
     }
 
 	private void viewTransferHistory() {
+//        String token = currentUser.getToken();
+//        if (token != null) {
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setBearerAuth(token);
+//            HttpEntity<Void> entity = new HttpEntity<>(headers);
+//            ResponseEntity<>
 		// TODO Auto-generated method stub
 		
 	}
