@@ -44,6 +44,18 @@ public class JdbcTransferDao implements TransferDao {
 
         return getTransfer(transferId);
     }
+/////added this - let me know if I've just been staring at a computer too long.  This is obviously only 1/2 of the transaction.  
+    public Transfer transferTo(int accountFrom, int accountTo, BigDecimal transferAmount){
+        String sql = "INSERT INTO tenmo_transfer (account_from, account_to, amount" +
+                "VALUES (?, ?, ?) " +
+                "JOIN tenmo_account WHERE user_id = account_to " +
+                "SET balance = balance +;" + transferAmount;
+        jdbcTemplate.update(sql, accountFrom, accountFrom, transferAmount);
+
+        return getTransfer(accountTo);
+    }
+
+
 
     @Override
     public List<Transfer> getAllTransfers() {
