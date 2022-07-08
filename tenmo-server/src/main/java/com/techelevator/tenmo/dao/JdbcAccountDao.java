@@ -4,11 +4,11 @@ import com.techelevator.tenmo.model.Account;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
-import java.net.BindException;
 import java.util.ArrayList;
 import java.util.List;
+
+
 @Component
 public class JdbcAccountDao implements AccountDao {
 
@@ -67,10 +67,17 @@ public class JdbcAccountDao implements AccountDao {
         return account.getBalance();
     }
 
-    @Override
-    public void updateBalance(BigDecimal changeBalance, int acctId) {
+@Override
+    public void updateBalanceTo(BigDecimal changeBalance, int acctId) {
         String sql = "UPDATE tenmo_account " +
                 "SET balance = balance + ? " +
+                "WHERE account_id = ?;";
+        jdbcTemplate.update(sql, Account.class, changeBalance, acctId);
+    }
+@Override
+    public void updateBalanceFrom(BigDecimal changeBalance, int acctId) {
+        String sql = "UPDATE tenmo_account " +
+                "SET balance = balance - ? " +
                 "WHERE account_id = ?;";
         jdbcTemplate.update(sql, Account.class, changeBalance, acctId);
     }
@@ -92,6 +99,8 @@ public class JdbcAccountDao implements AccountDao {
         String sql = "DELETE FROM tenmo_account WHERE account_id = ?;";
         jdbcTemplate.update(sql, acctId);
     }
+
+
 
     private Account mapRowToAccount(SqlRowSet results) {
         Account account = new Account();
