@@ -95,13 +95,14 @@ public class App {
     }
 
 	private void viewCurrentBalance() {
+        long userId = currentUser.getUser().getId();
 
         String token = currentUser.getToken();
         if (token != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(token);
             HttpEntity<Void> entity = new HttpEntity<>(headers);
-            ResponseEntity<BigDecimal> account = restTemplate.exchange(API_BASE_URL + "account/balance/2001", HttpMethod.GET, entity, BigDecimal.class);
+            ResponseEntity<BigDecimal> account = restTemplate.exchange(API_BASE_URL + "account/balance/" + userId, HttpMethod.GET, entity, BigDecimal.class);
             System.out.println(account.getBody());
         }
     }
