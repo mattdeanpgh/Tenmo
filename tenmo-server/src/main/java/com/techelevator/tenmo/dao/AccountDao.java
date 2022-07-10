@@ -10,7 +10,7 @@ public interface AccountDao {
 
         List<Account> getAllAccounts();
 
-        BigDecimal getBalanceByUserId(int id);
+        BigDecimal getBalanceByUserId(Long id);
 
         BigDecimal getBalanceByAcctId(int acctId);
 

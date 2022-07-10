@@ -46,7 +46,7 @@ public class JdbcAccountDao implements AccountDao {
 
 
     @Override
-    public BigDecimal getBalanceByUserId(int userId) {
+    public BigDecimal getBalanceByUserId(Long userId) {
         Account account = null;
         String sql = "SELECT * FROM tenmo_account WHERE user_id = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);

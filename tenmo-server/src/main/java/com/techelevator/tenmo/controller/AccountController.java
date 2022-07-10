@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
+//@PreAuthorize("isAuthenticated()")
 @RequestMapping("/account")
 public class AccountController {
 
@@ -37,6 +37,10 @@ public class AccountController {
         return dao.getBalanceByAcctId(acctId);
     }
 
+    @RequestMapping(path = "/balance/user/{userId}", method = RequestMethod.GET)
+    public BigDecimal accountBalance (@PathVariable Long userId) {
+        return dao.getBalanceByUserId(userId);
+    }
 
 
 }

@@ -11,6 +11,8 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+
 public class AccountService {
     private static final String API_BASE_URL = "http://localhost:8080/";
     private final RestTemplate restTemplate = new RestTemplate();
@@ -22,7 +24,8 @@ public class AccountService {
 
 
     public Transfer[] listTransfers() {
-        long accountId = currentUser.getUser().getId();
+       Long userId = currentUser.getUser().getUserId();
+
 
         String authToken = currentUser.getToken();
         Transfer[] transfers = new Transfer[0];
@@ -32,7 +35,7 @@ public class AccountService {
             headers.setBearerAuth(authToken);
             HttpEntity<Void> entity = new HttpEntity<>(headers);
             try {
-                ResponseEntity<Transfer[]> response = restTemplate.exchange(API_BASE_URL + "/transfer/history/" + accountId, HttpMethod.GET,
+                ResponseEntity<Transfer[]> response = restTemplate.exchange(API_BASE_URL + "/transfer/history/" + userId, HttpMethod.GET,
                         entity, Transfer[].class);
                 transfers = response.getBody();
             } catch (RestClientResponseException | ResourceAccessException e) {
@@ -43,8 +46,8 @@ public class AccountService {
 
     }
 
-    public Transfer viewTransfer() {
-        int transferId = viewTransfer().getTransferId();
+    public Transfer viewTransfer(int transferId) {
+
         String authToken = currentUser.getToken();
         Transfer transfer = new Transfer();
         if (authToken != null) {
@@ -61,6 +64,26 @@ public class AccountService {
             }
         }
         return transfer;
+    }
+
+    public Transfer createTransfer(int transferId){
+        String authToken = currentUser.getToken();
+        Transfer transfer = new Transfer();
+        if (authToken != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBearerAuth(authToken);
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+            try {
+                ResponseEntity<Transfer> response = restTemplate.exchange(API_BASE_URL + "/transfer/new/" + transferId + HttpMethod.POST,
+                        entity, Transfer.class);
+                transfer = response.getBody();
+            } catch (RestClientResponseException | ResourceAccessException e) {
+                System.out.println(e.getMessage());
+                BasicLogger.log(e.getMessage());
+            }
+        }
+        return transfer;
+
     }
 
 

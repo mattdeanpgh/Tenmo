@@ -95,21 +95,22 @@ public class App {
     }
 
 	private void viewCurrentBalance() {
-        long userId = currentUser.getUser().getId();
+        Long userId = currentUser.getUser().getUserId();
+
 
         String token = currentUser.getToken();
         if (token != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(token);
             HttpEntity<Void> entity = new HttpEntity<>(headers);
-            ResponseEntity<BigDecimal> account = restTemplate.exchange(API_BASE_URL + "account/balance/" + userId, HttpMethod.GET, entity, BigDecimal.class);
+            ResponseEntity<BigDecimal> account = restTemplate.exchange(API_BASE_URL + "account/balance/user/" + userId, HttpMethod.GET, entity, BigDecimal.class);
             System.out.println(account.getBody());
         }
     }
 
 	private void viewTransferHistory() {
         Transfer[] transfers = accountService.listTransfers();
-        Transfer transfer = accountService.viewTransfer();
+
         int transferSpecifics;
 
         if (transfers != null) {
@@ -117,6 +118,7 @@ public class App {
             System.out.println();
             transferSpecifics = consoleService.promptForMenuSelection("Please enter transfer ID to view details (0 to cancel): ");
             if (transferSpecifics > 0) {
+                Transfer transfer = accountService.viewTransfer(transferSpecifics);
                 consoleService.printTransfer(transfer);
             }
         }
@@ -130,8 +132,9 @@ public class App {
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
-        //need a sub-menu?
+        Transfer transferEnteredByUser = consoleService.promptForTransferData;
+
+        Transfer transferFromApi = accountService.createTransfer(transferEnteredByUser);
 		
 	}
 

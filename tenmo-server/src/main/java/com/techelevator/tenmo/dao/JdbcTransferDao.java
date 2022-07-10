@@ -1,15 +1,8 @@
 package com.techelevator.tenmo.dao;
 
-import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserNotFoundException;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -60,10 +53,13 @@ public class JdbcTransferDao implements TransferDao {
     }
 
     @Override
-    public List<Transfer> getTransfersForUser(int accountFrom, int accountTo) {
+    public List<Transfer> getTransfersForUser(Long userId) {
         List<Transfer> transfersForUser = new ArrayList<>();
-        String sql = "SELECT * FROM tenmo_transfer WHERE account_from = ? OR account_to = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountFrom, accountTo);
+        String sql = "SELECT * " +
+                "FROM tenmo_transfer " +
+                "INNER JOIN tenmo_account ON account_to = account_id OR account_from = account_id " +
+                "WHERE user_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
         while (results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transfersForUser.add(transfer);
@@ -71,14 +67,16 @@ public class JdbcTransferDao implements TransferDao {
         return transfersForUser;
     }
 
+
     @Override
     public Transfer getTransferStatus(int transferId) {
         return null;
     }
 
     @Override
-    public Transfer getTransferAmount(int transferId) {
-        return null;
+    public Transfer getTransferAmount(int transferId) { return null;
+
+
     }
 
     @Override

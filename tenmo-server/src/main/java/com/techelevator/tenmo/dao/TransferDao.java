@@ -13,7 +13,8 @@ public interface TransferDao {
 
     List<Transfer> getAllTransfers();
 
-    List<Transfer> getTransfersForUser(int accountFrom, int accountTo);
+    List<Transfer> getTransfersForUser(Long userId);
+
 
     Transfer getTransferStatus (int transferId);
 

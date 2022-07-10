@@ -28,9 +28,9 @@ public class TransferController {
         this.accountDao = accountDao;
     }
 
-    @RequestMapping(path = "/history/{acctId}", method = RequestMethod.GET)
-    public List<Transfer> transfersForUser(@PathVariable int acctId) {
-        return transferDao.getTransfersForUser(acctId, acctId);
+    @RequestMapping(path = "/history/{userId}", method = RequestMethod.GET)
+    public List<Transfer> transfersForUser(@PathVariable Long userId) {
+        return transferDao.getTransfersForUser(userId);
     }
 
     @RequestMapping(path = "/{transferId}", method = RequestMethod.GET)
@@ -39,7 +39,7 @@ public class TransferController {
     }
 
 
-    @RequestMapping(path = "/{transferId}", method = RequestMethod.POST)
+    @RequestMapping(path = "/{transferEnteredByUser}", method = RequestMethod.POST)
     public Transfer transferById(@Valid @RequestBody Transfer transfer) {
         int accountFrom = transfer.getAccountFrom();
 

@@ -57,8 +57,8 @@ public class JdbcAccountDaoTests extends BaseDaoTests {
 
     @Test
     public void getBalanceByUserId_return_correct_balance() {
-      BigDecimal balance = sut.getBalanceByUserId(1002);
-      Assert.assertTrue(sut.getBalanceByUserId(1002).compareTo(new BigDecimal(500)) == 0);
+      BigDecimal balance = sut.getBalanceByUserId(1002L);
+      Assert.assertTrue(sut.getBalanceByUserId(1002L).compareTo(new BigDecimal(500)) == 0);
 
     }
 
