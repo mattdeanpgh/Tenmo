@@ -104,7 +104,8 @@ public class App {
             headers.setBearerAuth(token);
             HttpEntity<Void> entity = new HttpEntity<>(headers);
             ResponseEntity<BigDecimal> account = restTemplate.exchange(API_BASE_URL + "account/balance/user/" + userId, HttpMethod.GET, entity, BigDecimal.class);
-            System.out.println(account.getBody());
+            System.out.println();
+            System.out.println("Your current account balance is $" + account.getBody());
         }
     }
 
