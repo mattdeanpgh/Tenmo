@@ -133,7 +133,6 @@ public class App {
 
 	private void sendBucks() {
         Transfer transferEnteredByUser = consoleService.promptForTransferData;
-
         Transfer transferFromApi = accountService.createTransfer(transferEnteredByUser);
 		
 	}

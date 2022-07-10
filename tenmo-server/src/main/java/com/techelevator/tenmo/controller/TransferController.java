@@ -22,10 +22,17 @@ import java.util.Random;
 public class TransferController {
     private TransferDao transferDao;
     private AccountDao accountDao;
+    private UserDao userDao;
 
-    public TransferController(TransferDao transferDao, AccountDao accountDao) {
+    public TransferController(TransferDao transferDao, AccountDao accountDao, UserDao userDao) {
         this.transferDao = transferDao;
         this.accountDao = accountDao;
+        this.userDao = userDao;
+    }
+
+    @RequestMapping(path = "/history", method = RequestMethod.GET)
+    public List<Transfer> allTransfers(){
+        return transferDao.getAllTransfers();
     }
 
     @RequestMapping(path = "/history/{userId}", method = RequestMethod.GET)
@@ -39,21 +46,43 @@ public class TransferController {
     }
 
 
-    @RequestMapping(path = "/{transferEnteredByUser}", method = RequestMethod.POST)
+    //    @RequestMapping(path = "/{transferId}", method = RequestMethod.POST)
+//    public Transfer transferById(@Valid @RequestBody Transfer transfer) {
+//        int accountFrom = transfer.getAccountFrom();
+//
+//       if ((transfer.getTransferAmount().compareTo(new BigDecimal(0.00)) == 1) &&
+//                (transfer.getTransferAmount().compareTo(accountDao.getBalanceByAcctId(accountFrom)) == 1))
+//        {
+//
+//        accountDao.updateBalanceFrom(transfer.getTransferAmount(), transfer.getAccountFrom());
+//        accountDao.updateBalanceTo(transfer.getTransferAmount(), transfer.getAccountTo());
+//        return transferDao.createTransfer(transfer, transfer.getAccountTo());
+//
+//
+//    } else return null;
+//}
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping( path = "", method = RequestMethod.POST)
     public Transfer transferById(@Valid @RequestBody Transfer transfer) {
-        int accountFrom = transfer.getAccountFrom();
-
-       if ((transfer.getTransferAmount().compareTo(new BigDecimal(0.00)) == 1) &&
-                (transfer.getTransferAmount().compareTo(accountDao.getBalanceByAcctId(accountFrom)) == 1))
-        {
-
-        accountDao.updateBalanceFrom(transfer.getTransferAmount(), transfer.getAccountFrom());
-        accountDao.updateBalanceTo(transfer.getTransferAmount(), transfer.getAccountTo());
+            accountDao.updateBalanceFrom(transfer.getTransferAmount(), transfer.getAccountFrom());
+            accountDao.updateBalanceTo(transfer.getTransferAmount(), transfer.getAccountTo());
         return transferDao.createTransfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(),
                 transfer.getAccountTo(), transfer.getTransferAmount());
-
-
-    } else return null;
-}
+    }
+//    @RequestMapping(path = "/{transferEnteredByUser}", method = RequestMethod.POST)
+//    public Transfer transferById(@Valid @RequestBody Transfer transfer) {
+//        int accountFrom = transfer.getAccountFrom();
+//
+//        if ((transfer.getTransferAmount().compareTo(new BigDecimal(0.00)) == 1) &&
+//                (transfer.getTransferAmount().compareTo(accountDao.getBalanceByAcctId(accountFrom)) == 1)) {
+//
+//            accountDao.updateBalanceFrom(transfer.getTransferAmount(), transfer.getAccountFrom());
+//            accountDao.updateBalanceTo(transfer.getTransferAmount(), transfer.getAccountTo());
+//            return transferDao.createTransfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(),
+//                    transfer.getAccountTo(), transfer.getTransferAmount());
+//        }
+//        return null;
+//    }
 }
 

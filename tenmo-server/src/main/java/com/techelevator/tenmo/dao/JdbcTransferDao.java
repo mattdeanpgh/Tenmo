@@ -13,6 +13,7 @@ import java.util.List;
 public class JdbcTransferDao implements TransferDao {
 
     private final JdbcTemplate jdbcTemplate;
+
     public JdbcTransferDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -28,13 +29,14 @@ public class JdbcTransferDao implements TransferDao {
         return transfer;
     }
 
+
     @Override
     public Transfer createTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal transferAmount) {
         String sql =    "INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
-                        "VALUES (2, 2, ?, ?, ?) " +
+                        "VALUES (?, ?, ?, ?, ?) " +
                         "RETURNING transfer_id;" ;
 
-        int transferId = jdbcTemplate.queryForObject(sql, Integer.class, accountFrom, accountTo, transferAmount);
+        Integer transferId = jdbcTemplate.queryForObject(sql, Integer.class, transferTypeId, transferStatusId, accountFrom, accountTo, transferAmount);
 
 
         return getTransfer(transferId);

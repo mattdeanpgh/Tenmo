@@ -1,16 +1,16 @@
 package com.techelevator.tenmo.services;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.util.BasicLogger;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class AccountService {
@@ -66,23 +66,24 @@ public class AccountService {
         return transfer;
     }
 
-    public Transfer createTransfer(int transferId){
+
+    public Transfer createTransfer(Transfer newTransfer){
         String authToken = currentUser.getToken();
-        Transfer transfer = new Transfer();
+        Transfer returnedTransfer = null;
         if (authToken != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(authToken);
-            HttpEntity<Void> entity = new HttpEntity<>(headers);
+            HttpEntity<Transfer> entity = new HttpEntity<>(newTransfer, headers);
+
+
             try {
-                ResponseEntity<Transfer> response = restTemplate.exchange(API_BASE_URL + "/transfer/new/" + transferId + HttpMethod.POST,
+                returnedTransfer = restTemplate.postForObject(API_BASE_URL + "/transfer/" + HttpMethod.POST,
                         entity, Transfer.class);
-                transfer = response.getBody();
             } catch (RestClientResponseException | ResourceAccessException e) {
                 System.out.println(e.getMessage());
                 BasicLogger.log(e.getMessage());
             }
-        }
-        return transfer;
+        } return returnedTransfer;
 
     }
 

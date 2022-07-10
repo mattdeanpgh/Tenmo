@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class ConsoleService {
 
     private final Scanner scanner = new Scanner(System.in);
+    public Transfer promptForTransferData;
 
     public int promptForMenuSelection(String prompt) {
         int menuSelection;
@@ -105,6 +106,46 @@ public class ConsoleService {
         System.out.println("--------------------------------------------");
         System.out.println(transfer.getTransferId() + " " + transfer.getTransferStatusId());
 
+    }
+
+    public Transfer promptForTransferData(Transfer existingTransfer) {
+        Transfer newTransfer = null;
+        while (newTransfer == null) {
+            System.out.println("--------------------------------------------");
+            System.out.println("Enter transfer data as a comma separated list containing:");
+            System.out.println("account_to, transfer_amount");
+            if (existingTransfer != null) {
+                System.out.println(existingTransfer);
+            } else {
+                System.out.println("2, 100");
+            }
+            System.out.println("--------------------------------------------");
+            System.out.println();
+            newTransfer= makeTransfer(scanner.nextLine());
+            if (newTransfer == null) {
+                System.out.println("Invalid entry. Please try again.");
+            }
+        }
+        if (existingTransfer != null) {
+            newTransfer.setTransferId(existingTransfer.getTransferId());
+        }
+        return newTransfer;
+    }
+
+    private Transfer makeTransfer (String csv) {
+        Transfer transfer = null;
+        String[] parsed = csv.split(",");
+        if (parsed.length == 2) {
+            try {
+                transfer = new Transfer();
+                transfer.setAccountTo(Integer.parseInt(parsed[0].trim()));
+                transfer.setTransferAmount(BigDecimal.valueOf(Long.parseLong(parsed[1].trim())));
+
+            } catch (NumberFormatException e) {
+                transfer = null;
+            }
+        }
+        return transfer;
     }
 }
 
