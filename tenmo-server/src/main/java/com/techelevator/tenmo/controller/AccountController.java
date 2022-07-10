@@ -4,6 +4,7 @@ import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.JdbcAccountDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,5 +43,9 @@ public class AccountController {
         return dao.getBalanceByUserId(userId);
     }
 
+    @RequestMapping(path = "/user", method = RequestMethod.GET)
+    public List<User> listUsers() {
+        return userDao.findAll();
+    }
 
 }

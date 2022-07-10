@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,7 @@ public class JdbcAccountDao implements AccountDao {
         }
         return accounts;
     }
+
     public Account getAccount(int accountId){
         Account account = null;
         String sql = "SELECT * FROM tenmo_account "

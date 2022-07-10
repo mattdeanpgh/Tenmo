@@ -22,6 +22,7 @@ public class App {
     private final AccountService accountService = new AccountService();
     private final RestTemplate restTemplate = new RestTemplate();
 
+
     private AuthenticatedUser currentUser;
 
     public static void main(String[] args) {

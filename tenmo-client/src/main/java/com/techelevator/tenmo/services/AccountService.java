@@ -3,6 +3,7 @@ package com.techelevator.tenmo.services;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.util.BasicLogger;
 import org.springframework.http.*;
@@ -77,7 +78,7 @@ public class AccountService {
 
 
             try {
-                returnedTransfer = restTemplate.postForObject(API_BASE_URL + "/transfer/" + HttpMethod.POST,
+                restTemplate.postForObject(API_BASE_URL + "/transfer" + HttpMethod.POST,
                         entity, Transfer.class);
             } catch (RestClientResponseException | ResourceAccessException e) {
                 System.out.println(e.getMessage());
@@ -85,6 +86,16 @@ public class AccountService {
             }
         } return returnedTransfer;
 
+    }
+    User[] listOfUsers() {
+        User[] users = null;
+        try {
+            ResponseEntity<User[]> response = restTemplate.exchange(API_BASE_URL + "account/user", HttpMethod.GET, entity, User[].class);
+            users = response.getBody();
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return users;
     }
 
 
