@@ -14,8 +14,8 @@ public interface AccountDao {
 
         BigDecimal getBalanceByAcctId(int acctId);
 
-        void updateBalanceTo(BigDecimal balance, int acctId);
-        void updateBalanceFrom(BigDecimal balance, int acctId);
+  //      void updateBalanceTo(BigDecimal balance, int acctId);
+   //     void updateBalanceFrom(BigDecimal balance, int acctId);
 
         Account addAccount(int userId);
 

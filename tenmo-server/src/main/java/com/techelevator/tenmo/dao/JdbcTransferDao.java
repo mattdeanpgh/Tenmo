@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.Account;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -31,13 +32,41 @@ public class JdbcTransferDao implements TransferDao {
 
 
     @Override
-    public Transfer createTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal transferAmount) {
-        String sql =    "INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
-                        "VALUES (?, ?, ?, ?, ?) " +
-                        "RETURNING transfer_id;" ;
+    public Transfer createTransfer(Transfer transfer) {
+        Account fromAccount = new Account();
+        String sqlAccount = "SELECT account_id, user_id, balance " +
+                "FROM account WHERE account_id = ?;";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sqlAccount, transfer.getAccountFrom());
+        while (result.next()) {
+            fromAccount = mapRowToAccount(result);
+        }
+        if (fromAccount.getBalance().compareTo(transfer.getTransferAmount()) < 0) {
+            System.out.println("Sorry, there's not enough in your account to transfer that amount");
+            return null;
+        } else if (transfer.getTransferAmount().compareTo(transfer.getTransferAmount()) <= 0) {
+            System.out.println("Sorry, you can't transfer a negative amount");
+            return null;
+        } else if (fromAccount.getAccountId() == transfer.getAccountTo()) {
+            System.out.println("Error - receiver and sender are the same ");
+            return null;
+        }
+        String sql = "INSERT INTO tenmo_transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
+                "VALUES (?, ?, ?, ?, ?) " +
+                "RETURNING transfer_id;";
 
-        Integer transferId = jdbcTemplate.queryForObject(sql, Integer.class, transferTypeId, transferStatusId, accountFrom, accountTo, transferAmount);
+        Integer transferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getTransferTypeId(), transfer.getTransferStatusId(),
+                transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getTransferAmount());
 
+
+        String sqlBalanceTo = "UPDATE tenmo_account " +
+                    "SET balance = balance + ? " +
+                    "WHERE account_id = ?;";
+            jdbcTemplate.update(sqlBalanceTo, transfer.getTransferAmount(), transfer.getAccountTo());
+
+    String sqlBalanceFrom = "UPDATE tenmo_account " +
+                    "SET balance = balance - ? " +
+                    "WHERE account_id = ?;";
+            jdbcTemplate.update(sqlBalanceFrom, transfer.getTransferAmount(), transfer.getAccountFrom());
 
         return getTransfer(transferId);
     }
@@ -105,5 +134,13 @@ public class JdbcTransferDao implements TransferDao {
         return transfer;
 
 
+    }
+
+    private Account mapRowToAccount(SqlRowSet results) {
+        Account account = new Account();
+        account.setAccountId(results.getInt("account_id"));
+        account.setUserId(results.getInt("user_id"));
+        account.setBalance(results.getBigDecimal("balance"));
+        return account;
     }
 }

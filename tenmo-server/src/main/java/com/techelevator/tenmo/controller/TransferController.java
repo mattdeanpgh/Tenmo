@@ -65,10 +65,7 @@ public class TransferController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping( path = "", method = RequestMethod.POST)
     public Transfer transferById(@Valid @RequestBody Transfer transfer) {
-            accountDao.updateBalanceFrom(transfer.getTransferAmount(), transfer.getAccountFrom());
-            accountDao.updateBalanceTo(transfer.getTransferAmount(), transfer.getAccountTo());
-        return transferDao.createTransfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(),
-                transfer.getAccountTo(), transfer.getTransferAmount());
+        return transferDao.createTransfer(transfer);
     }
 //    @RequestMapping(path = "/{transferEnteredByUser}", method = RequestMethod.POST)
 //    public Transfer transferById(@Valid @RequestBody Transfer transfer) {

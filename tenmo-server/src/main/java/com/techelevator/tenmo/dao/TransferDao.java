@@ -9,7 +9,7 @@ public interface TransferDao {
 
     Transfer getTransfer (int transferId);
 
-    Transfer createTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal transferAmount);
+    Transfer createTransfer(Transfer transfer);
 
     List<Transfer> getAllTransfers();
 

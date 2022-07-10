@@ -67,20 +67,7 @@ public class JdbcAccountDao implements AccountDao {
         return account.getBalance();
     }
 
-@Override
-    public void updateBalanceTo(BigDecimal changeBalance, int acctId) {
-        String sql = "UPDATE tenmo_account " +
-                "SET balance = balance + ? " +
-                "WHERE account_id = ?;";
-        jdbcTemplate.update(sql, Account.class, changeBalance, acctId);
-    }
-@Override
-    public void updateBalanceFrom(BigDecimal changeBalance, int acctId) {
-        String sql = "UPDATE tenmo_account " +
-                "SET balance = balance - ? " +
-                "WHERE account_id = ?;";
-        jdbcTemplate.update(sql, Account.class, changeBalance, acctId);
-    }
+
 
 
     @Override
