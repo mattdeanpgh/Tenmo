@@ -35,7 +35,7 @@ public class JdbcTransferDao implements TransferDao {
     public Transfer createTransfer(Transfer transfer) {
         Account fromAccount = new Account();
         String sqlAccount = "SELECT account_id, user_id, balance " +
-                "FROM account WHERE account_id = ?;";
+                "FROM tenmo_account WHERE account_id = ?;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sqlAccount, transfer.getAccountFrom());
         while (result.next()) {
             fromAccount = mapRowToAccount(result);
@@ -43,7 +43,7 @@ public class JdbcTransferDao implements TransferDao {
         if (fromAccount.getBalance().compareTo(transfer.getTransferAmount()) < 0) {
             System.out.println("Sorry, there's not enough in your account to transfer that amount");
             return null;
-        } else if (transfer.getTransferAmount().compareTo(transfer.getTransferAmount()) <= 0) {
+        } else if (transfer.getTransferAmount().compareTo(transfer.getTransferAmount()) < 0) {
             System.out.println("Sorry, you can't transfer a negative amount");
             return null;
         } else if (fromAccount.getAccountId() == transfer.getAccountTo()) {

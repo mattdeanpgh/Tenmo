@@ -63,10 +63,11 @@ public class TransferController {
 //}
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping( path = "", method = RequestMethod.POST)
+    @RequestMapping( path = "/new", method = RequestMethod.POST)
     public Transfer transferById(@Valid @RequestBody Transfer transfer) {
         return transferDao.createTransfer(transfer);
     }
+
 //    @RequestMapping(path = "/{transferEnteredByUser}", method = RequestMethod.POST)
 //    public Transfer transferById(@Valid @RequestBody Transfer transfer) {
 //        int accountFrom = transfer.getAccountFrom();

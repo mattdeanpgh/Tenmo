@@ -1,7 +1,6 @@
 package com.techelevator.tenmo.services;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.Transfer;
@@ -11,13 +10,10 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-
 public class AccountService {
     private static final String API_BASE_URL = "http://localhost:8080/";
-    private final RestTemplate restTemplate = new RestTemplate();
-    private AuthenticatedUser currentUser;
+    private static final RestTemplate restTemplate = new RestTemplate();
+    private static AuthenticatedUser currentUser;
 
     public void setCurrentUser(AuthenticatedUser currentUser) {
         this.currentUser = currentUser;
@@ -74,20 +70,23 @@ public class AccountService {
         if (authToken != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(authToken);
-            HttpEntity<Transfer> entity = new HttpEntity<>(newTransfer, headers);
-
+            HttpEntity<Transfer> entity = new HttpEntity<>(headers);
 
             try {
-                restTemplate.postForObject(API_BASE_URL + "/transfer" + HttpMethod.POST,
-                        entity, Transfer.class);
+                return restTemplate.postForObject(API_BASE_URL + "transfer/new", HttpMethod.POST,
+                        Transfer.class);
             } catch (RestClientResponseException | ResourceAccessException e) {
                 System.out.println(e.getMessage());
                 BasicLogger.log(e.getMessage());
             }
-        } return returnedTransfer;
+        } return null;
 
     }
     User[] listOfUsers() {
+        String authToken = currentUser.getToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(authToken);
+        HttpEntity<Transfer> entity = new HttpEntity<>(headers);
         User[] users = null;
         try {
             ResponseEntity<User[]> response = restTemplate.exchange(API_BASE_URL + "account/user", HttpMethod.GET, entity, User[].class);

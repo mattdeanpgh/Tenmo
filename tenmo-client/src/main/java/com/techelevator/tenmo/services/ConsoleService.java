@@ -1,6 +1,8 @@
 package com.techelevator.tenmo.services;
 
 
+import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.UserCredentials;
 
@@ -10,6 +12,7 @@ import java.util.Scanner;
 public class ConsoleService {
 
     private final Scanner scanner = new Scanner(System.in);
+    private final AccountService accountService = new AccountService();
     public Transfer promptForTransferData;
 
     public int promptForMenuSelection(String prompt) {
@@ -116,26 +119,23 @@ public class ConsoleService {
 
     }
 
-    public Transfer promptForTransferData(Transfer existingTransfer) {
+    public Transfer promptForTransferData() {
         Transfer newTransfer = null;
-        while (newTransfer == null) {
+
             System.out.println("--------------------------------------------");
             System.out.println("Enter transfer data as a comma separated list containing:");
             System.out.println("account_to, transfer_amount");
-            if (existingTransfer != null) {
-                System.out.println(existingTransfer);
-            } else {
-                System.out.println("2, 100");
-            }
-            System.out.println("--------------------------------------------");
-            System.out.println();
-            newTransfer= makeTransfer(scanner.nextLine());
-            if (newTransfer == null) {
-                System.out.println("Invalid entry. Please try again.");
-            }
+            System.out.println("2, 100");
+
+        System.out.println("--------------------------------------------");
+        System.out.println();
+        newTransfer = makeTransfer(scanner.nextLine());
+        if (newTransfer == null) {
+            System.out.println("Invalid entry. Please try again.");
         }
-        if (existingTransfer != null) {
-            newTransfer.setTransferId(existingTransfer.getTransferId());
+        if (newTransfer != null) {
+            accountService.createTransfer(newTransfer);
+
         }
         return newTransfer;
     }

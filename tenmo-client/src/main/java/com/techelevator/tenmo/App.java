@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class App {
 
@@ -21,6 +22,7 @@ public class App {
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
     private final AccountService accountService = new AccountService();
     private final RestTemplate restTemplate = new RestTemplate();
+    private final Scanner scanner = new Scanner(System.in);
 
 
     private AuthenticatedUser currentUser;
@@ -134,10 +136,53 @@ public class App {
 	}
 
 	private void sendBucks() {
-        Transfer transferEnteredByUser = consoleService.promptForTransferData;
-        Transfer transferFromApi = accountService.createTransfer(transferEnteredByUser);
-		
-	}
+        Transfer newTransfer = null;
+
+        System.out.println("--------------------------------------------");
+        System.out.println("Enter transfer data as a comma separated list containing:");
+        System.out.println("account_to, transfer_amount");
+        System.out.println("2, 100");
+
+        System.out.println("--------------------------------------------");
+        System.out.println();
+        newTransfer = makeTransfer(scanner.nextLine());
+        if (newTransfer == null) {
+            System.out.println("Invalid entry. Please try again.");
+        }
+        if (newTransfer != null) {
+            int accountFrom =  currentUser.getUser().getUserId().intValue() + 1000;
+            newTransfer.setTransferId(1);
+            newTransfer.setTransferTypeId(1);
+            newTransfer.setTransferStatusId(2);
+            newTransfer.setAccountFrom(accountFrom);
+            newTransfer.setAccountTo(newTransfer.getAccountTo());
+            newTransfer.setTransferAmount(newTransfer.getTransferAmount());
+
+            accountService.createTransfer(newTransfer);
+
+        }
+    }
+
+    private Transfer makeTransfer (String csv) {
+        Transfer transfer = null;
+        String[] parsed = csv.split(", ");
+        BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(parsed[1].trim()));
+        if (parsed.length == 2) {
+            try {
+                transfer = new Transfer();
+                transfer.setTransferId(1);
+                transfer.setTransferTypeId(1);
+                transfer.setTransferStatusId(2);
+                transfer.setAccountFrom(2001);
+                transfer.setAccountTo(Integer.parseInt(parsed[0].trim()));
+                transfer.setTransferAmount(amount);
+
+            } catch (NumberFormatException e) {
+                transfer = null;
+            }
+        }
+        return transfer;
+    }
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
