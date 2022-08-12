@@ -66,20 +66,21 @@ public class AccountService {
 
     public Transfer createTransfer(Transfer newTransfer){
         String authToken = currentUser.getToken();
-        Transfer returnedTransfer = null;
+//        Transfer returnedTransfer = null;
         if (authToken != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(authToken);
-            HttpEntity<Transfer> entity = new HttpEntity<>(headers);
+            HttpEntity<Transfer> entity = new HttpEntity<>(newTransfer, headers);
 
-            try {
-                return restTemplate.postForObject(API_BASE_URL + "transfer/new", HttpMethod.POST,
-                        Transfer.class);
+            try {newTransfer = restTemplate.exchange(API_BASE_URL + "transfer/new", HttpMethod.PUT, entity, Transfer.class).getBody();
+
             } catch (RestClientResponseException | ResourceAccessException e) {
                 System.out.println(e.getMessage());
                 BasicLogger.log(e.getMessage());
             }
-        } return null;
+        } return  newTransfer;
+
+
 
     }
     User[] listOfUsers() {

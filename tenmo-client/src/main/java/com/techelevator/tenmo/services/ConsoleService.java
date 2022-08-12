@@ -119,42 +119,6 @@ public class ConsoleService {
 
     }
 
-    public Transfer promptForTransferData() {
-        Transfer newTransfer = null;
-
-            System.out.println("--------------------------------------------");
-            System.out.println("Enter transfer data as a comma separated list containing:");
-            System.out.println("account_to, transfer_amount");
-            System.out.println("2, 100");
-
-        System.out.println("--------------------------------------------");
-        System.out.println();
-        newTransfer = makeTransfer(scanner.nextLine());
-        if (newTransfer == null) {
-            System.out.println("Invalid entry. Please try again.");
-        }
-        if (newTransfer != null) {
-            accountService.createTransfer(newTransfer);
-
-        }
-        return newTransfer;
-    }
-
-    private Transfer makeTransfer (String csv) {
-        Transfer transfer = null;
-        String[] parsed = csv.split(",");
-        if (parsed.length == 2) {
-            try {
-                transfer = new Transfer();
-                transfer.setAccountTo(Integer.parseInt(parsed[0].trim()));
-                transfer.setTransferAmount(BigDecimal.valueOf(Long.parseLong(parsed[1].trim())));
-
-            } catch (NumberFormatException e) {
-                transfer = null;
-            }
-        }
-        return transfer;
-    }
 }
 
 

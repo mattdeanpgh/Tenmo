@@ -160,11 +160,12 @@ public class App {
 
             accountService.createTransfer(newTransfer);
 
+
         }
     }
 
     private Transfer makeTransfer (String csv) {
-        Transfer transfer = null;
+        Transfer transfer = new Transfer();
         String[] parsed = csv.split(", ");
         BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(parsed[1].trim()));
         if (parsed.length == 2) {

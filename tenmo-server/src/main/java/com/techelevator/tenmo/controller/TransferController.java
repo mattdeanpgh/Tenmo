@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.List;
 import java.util.Random;
 
@@ -62,9 +63,8 @@ public class TransferController {
 //    } else return null;
 //}
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping( path = "/new", method = RequestMethod.POST)
-    public Transfer transferById(@Valid @RequestBody Transfer transfer) {
+    @RequestMapping( path = "/new", method = RequestMethod.PUT)
+    public Transfer transfer(@RequestBody Transfer transfer) {
         return transferDao.createTransfer(transfer);
     }
 
